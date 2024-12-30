@@ -37,4 +37,4 @@ jobs:
       # Step 6: Deploy and run the k6 test
       - name: Deploy and run k6 test
         run: |
-          oc run k6 DemoService/main.js --image=image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0 --restart=Never --attach=true --rm
+          oc run k6-test --image=image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0 --restart=Never --attach=true --rm
