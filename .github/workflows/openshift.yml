@@ -26,8 +26,15 @@ jobs:
       - name: Log in to OpenShift internal registry
         run: |
           oc registry login --token=sha256~Bnf7eE6SdaUqlCLbqE6-_9dz6X2hr64hoHqEdYyGj6A --server=https://api.sandbox-m3.1530.p1.openshiftapps.com:6443
-
-      # Step 8: Deploy and run the k6 test
+      
+      # Step 5 : Switching to Correct Openshift project namespace
+      - name: Switch to OpenShift project
+        env:
+          OPENSHIFT_PROJECT: senarindam21-dev
+        run: |
+          oc project $OPENSHIFT_PROJECT
+          
+      # Step 6: Deploy and run the k6 test
       - name: Deploy and run k6 test
         run: |
           oc run k6 DemoService/main.js --image=image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0 --restart=Never --attach=true --rm
