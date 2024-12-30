@@ -16,10 +16,11 @@ jobs:
 
       # Step 2: Log in to OpenShift
       - name: Log in to OpenShift
-        uses: redhat-developer/openshift-actions/login@v2
-        with:
-          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
-          parameters: "--token=${{ secrets.OPENSHIFT_TOKEN }} --insecure-skip-tls-verify"
+        env:
+          OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER_URL }}
+          OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+        run: |
+          oc login $OPENSHIFT_SERVER_URL --token=$OPENSHIFT_TOKEN --insecure-skip-tls-verify
 
       # Step 4: Log in to OpenShift internal registry
       - name: Log in to OpenShift internal registry
