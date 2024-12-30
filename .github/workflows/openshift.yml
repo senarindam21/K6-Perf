@@ -34,12 +34,7 @@ jobs:
         run: |
           oc project $OPENSHIFT_PROJECT
           
-      # Step 6: Create the POD using yaml
+      # Step 6: Create the POD using yaml & execute K6 test
       - name: Create the k6 test POD
         run: |
           oc apply -f DemoService/k6-pod.yaml
-
-      # Step 7: Run the k6 test in the created POD
-      - name: Execute the K6 test
-        run: |
-          k6 run /DemoService/main.js
