@@ -20,7 +20,7 @@ jobs:
           OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER_URL }}
           OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
         run: |
-          oc login https://api.sandbox-m3.1530.p1.openshiftapps.com:6443 --token=sha256~Bnf7eE6SdaUqlCLbqE6-_9dz6X2hr64hoHqEdYyGj6A --insecure-skip-tls-verify
+          oc login https://api.sandbox-m3.1530.p1.openshiftapps.com:6443 --token=sha256~Bnf7eE6SdaUqlCLbqE6-_9dz6X2hr64hoHqEdYyGj6A
 
       # Step 4: Log in to OpenShift internal registry
       - name: Log in to OpenShift internal registry
@@ -30,4 +30,4 @@ jobs:
       # Step 8: Deploy and run the k6 test
       - name: Deploy and run k6 test
         run: |
-          oc run k6-DemoService/main.js --image=image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0 --restart=Never --attach=true --rm
+          oc run k6 DemoService/main.js --image=image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0 --restart=Never --attach=true --rm
