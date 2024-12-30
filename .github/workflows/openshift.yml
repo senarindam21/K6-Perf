@@ -34,12 +34,12 @@ jobs:
         run: |
           oc project $OPENSHIFT_PROJECT
           
-      # Step 6: Create the POD on Openshift namespace
+      # Step 6: Create the POD using yaml
       - name: Create the k6 test POD
         run: |
-          oc run k6-test --image=image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0 --restart=Never --attach=true --rm
+          oc apply -f k6-pod.yaml
 
       # Step 7: Run the k6 test in the created POD
       - name: Execute the K6 test
         run: |
-          oc exec k6-test -- k6 run /DemoService/main.js
+          k6 run /DemoService/main.js
