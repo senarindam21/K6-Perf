@@ -13,6 +13,21 @@ spec:
         cluster-context: OCP4-SANDBOX-CLUSTER
         namespace: senarindam21-dev
     spec:
+      initContainers:
+      - name: git-clone
+        image: image-registry.openshift-image-registry.svc:5000/senarindam21-dev/kube-helm:latest
+        command: ['sh', '-c', 'sleep 30 && git clone -v --branch main https://TOKEN@github.com/senarindam21/K6-Perf.git /tmp']
+        volumeMounts:
+          - mountPath: /tmp
+            readOnly: false
+            name: git
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: '500m'
+          limits:
+            memory: 1Gi
+            cpu: '1'
       containers:
       - name: k6-demopnv
         image: image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0
