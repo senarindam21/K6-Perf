@@ -50,9 +50,8 @@ jobs:
       # Step 8: Apply Condition for POD Status to be Completed
       - name: POD Status Condition
         run: |
-          if [[ "$POD_STATUS" == "PENDING" ]]; then
+          while [[ "$POD_STATUS" != "COMPLETED" ]]; do
              echo "Test is in Progress"
-             sleep 30
-          else
+             sleep 10
+          done
              echo "Test is Completed"
-          fi
