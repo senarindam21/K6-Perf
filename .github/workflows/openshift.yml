@@ -46,10 +46,3 @@ jobs:
           POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
           echo "The Created POD is" $POD_NAME 
           echo "Current POD status is" $POD_STATUS
-
-      # Step 8: Apply Condition for POD Status to be Completed
-      - name: POD Status Condition
-        if: $POD_STATUS == 'PENDING' || $POD_STATUS == 'RUNNING'
-        run: |
-          echo "POD is in running state..."
-        
