@@ -53,3 +53,16 @@ jobs:
              sleep 20
           done
              echo "Test is Completed"
+
+      # Step 8: Retrieve POD logs
+      - name: Retrieve pod logs
+        run: |
+          mkdir -p logs
+          kubectl logs $POD_NAME > logs/pod.log
+
+      # Step 9: Upload POD logs to Github
+      - name: Upload POD logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: pod-logs
+          path: logs/
