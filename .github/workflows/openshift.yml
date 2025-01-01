@@ -51,7 +51,7 @@ jobs:
       - name: POD Status Condition
         run: |
           while [[ "$POD_STATUS" != "Succeeded" ]]; do
-             echo "Test is in Progress"
+             echo "Test is in Progress with" $POD_STATUS
              sleep 30
           done
              echo "Test is Completed"
