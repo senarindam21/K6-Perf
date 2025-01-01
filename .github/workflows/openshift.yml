@@ -44,20 +44,21 @@ jobs:
         run: |
           POD_NAME=$(kubectl get pods -o jsonpath='{.items[0].metadata.name}')
           echo "The Created POD is" $POD_NAME
-          sleep 20
           POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
           echo "Current POD status is" $POD_STATUS
+          sleep 30
           while [[ "$POD_STATUS" != "Succeeded" ]]; do
              POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
              echo "Test is in Progress with POD Status" $POD_STATUS
-             sleep 20
+             sleep 30
           done
              echo "Test is Completed"
 
       # Step 8: Retrieve POD logs
-      - name: Retrieve pod logs
+      - name: Retrieve POD logs
         run: |
           mkdir -p logs
+          POD_NAME=$(kubectl get pods -o jsonpath='{.items[0].metadata.name}')
           kubectl logs $POD_NAME > logs/pod.log
 
       # Step 9: Upload POD logs to Github
