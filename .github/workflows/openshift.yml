@@ -40,18 +40,19 @@ jobs:
           oc apply -f ./k6-pod.yaml
 
       # Step 7: Capture the Created POD name & Status
-      - name: Display POD Name & Status
+      - name: Display POD Name
         run: |
           POD_NAME=$(kubectl get pods -o jsonpath='{.items[0].metadata.name}')
-          POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
           echo "The Created POD is" $POD_NAME 
-          echo "Current POD status is" $POD_STATUS
+          sleep 10
 
-      # Step 8: Apply Condition for POD Status to be Completed
+      # Step 8: Apply Condition for POD Status to be Succeeded
       - name: POD Status Condition
         run: |
+          POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
+          echo "Current POD status is" $POD_STATUS
           while [[ "$POD_STATUS" != "Succeeded" ]]; do
-             echo "Test is in Progress with" $POD_STATUS
+             echo "Test is in Progress with POD Status" $POD_STATUS
              sleep 30
           done
              echo "Test is Completed"
