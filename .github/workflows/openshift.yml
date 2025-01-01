@@ -20,12 +20,12 @@ jobs:
           OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER_URL }}
           OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
         run: |
-          oc login https://api.sandbox-m3.1530.p1.openshiftapps.com:6443 --token=sha256~6ZrtXNwNIQ0zunbnb8uMVdJRPK1BQsGTwAPhPYCYDn0
+          oc login https://api.sandbox-m3.1530.p1.openshiftapps.com:6443 --token=sha256~RFq9dnBGAJWeILTYHTy1LM1Y-7MNvIn0PDPBa3r1Ls8
 
       # Step 4: Log in to OpenShift internal registry
       - name: Log in to OpenShift internal registry
         run: |
-          oc registry login --token=sha256~6ZrtXNwNIQ0zunbnb8uMVdJRPK1BQsGTwAPhPYCYDn0 --server=https://api.sandbox-m3.1530.p1.openshiftapps.com:6443
+          oc registry login --token=sha256~RFq9dnBGAJWeILTYHTy1LM1Y-7MNvIn0PDPBa3r1Ls8 --server=https://api.sandbox-m3.1530.p1.openshiftapps.com:6443
       
       # Step 5 : Switching to Correct Openshift project namespace
       - name: Switch to OpenShift project
