@@ -52,5 +52,4 @@ jobs:
         if: $POD_STATUS == 'PENDING' || $POD_STATUS == 'RUNNING'
         run: |
           echo "POD is in running state..."
-          sleep 30  # Pause for 30 seconds
         
