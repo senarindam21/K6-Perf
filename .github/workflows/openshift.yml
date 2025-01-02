@@ -46,7 +46,7 @@ jobs:
           echo "The Created POD is" $POD_NAME
           POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
           echo "Current POD status is" $POD_STATUS
-          sleep 30
+          sleep 60
           while [[ "$POD_STATUS" != "Succeeded" ]]; do
              POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
              echo "Test is in Progress with POD Status" $POD_STATUS
