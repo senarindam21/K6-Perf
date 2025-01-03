@@ -67,3 +67,8 @@ jobs:
         with:
           name: pod-logs
           path: logs/
+
+      # Step 10: Delete Openshift Job
+      - name: Delete OpenShift Job
+        run: |
+          oc delete job k6-demopnv
