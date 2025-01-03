@@ -30,7 +30,7 @@ jobs:
       # Step 5 : Switching to Correct Openshift project namespace
       - name: Switch to OpenShift project
         env:
-          OPENSHIFT_PROJECT: senarindam21-dev
+          OPENSHIFT_PROJECT: ${{ secrets.OPENSHIFT_PROJECT }}
         run: |
           oc project $OPENSHIFT_PROJECT
           
