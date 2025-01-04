@@ -1,7 +1,7 @@
 import { check } from 'k6'
 import http from "k6/http";
 
-  const vars = {}
+const vars = {}
 
   let launchpage = function () {
     let tagname = "T01_Demo_K6LaunchPage"
