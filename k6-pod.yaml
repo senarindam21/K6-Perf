@@ -23,11 +23,11 @@ spec:
             name: git
         resources:
           requests:
-            memory: 256Mi
-            cpu: '500m'
+            memory: 1G
+            cpu: 1
           limits:
-            memory: 1Gi
-            cpu: '1'
+            memory: 2G
+            cpu: '2'
       containers:
       - name: k6-demopnv
         image: image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0
