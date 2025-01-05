@@ -16,7 +16,7 @@ spec:
       initContainers:
       - name: git-clone
         image: image-registry.openshift-image-registry.svc:5000/senarindam21-dev/alpine:latest
-        command: ['/bin/sh', '-c', 'sleep 30 && git clone -v --branch main https://TOKEN@github.com/senarindam21/K6-Perf.git /tmp']
+        command: ['sh', '-c', 'sleep 30 && git clone -v --branch main https://TOKEN@github.com/senarindam21/K6-Perf.git /tmp']
         volumeMounts:
           - mountPath: /tmp
             readOnly: false
