@@ -16,18 +16,18 @@ spec:
       initContainers:
       - name: git-clone
         image: image-registry.openshift-image-registry.svc:5000/senarindam21-dev/alpine:latest
-        command: ['/bin/sh', '-c', 'sleep 30 && apk add --no-cache curl && curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/ && while true; do sleep 3600; done && git clone -v --branch main https://TOKEN@github.com/senarindam21/K6-Perf.git /tmp']
+        command: ['/bin/sh', '-c', 'sleep 30 && git clone -v --branch main https://TOKEN@github.com/senarindam21/K6-Perf.git /tmp']
         volumeMounts:
           - mountPath: /tmp
             readOnly: false
             name: git
         resources:
           requests:
-            memory: 2G
-            cpu: '2'
+            memory: 256Mi
+            cpu: '500m'
           limits:
-            memory: 2G
-            cpu: '2'
+            memory: 1G
+            cpu: '1'
       containers:
       - name: k6-demopnv
         image: image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0
