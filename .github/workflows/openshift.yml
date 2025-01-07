@@ -12,12 +12,20 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
+
+      # Step 2: Log in to OpenShift
+      - name: Log in to OpenShift
+        env:
+          OPENSHIFT_SERVER_URL: ${{ secrets.OPENSHIFT_SERVER_URL }}
+          OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+        run: |
+          oc login $OPENSHIFT_SERVER_URL --token=$OPENSHIFT_TOKEN
 
       # Step 4: Log in to OpenShift internal registry
       - name: Log in to OpenShift internal registry
         run: |
-          oc registry login --token=sha256~axBcJeHGRzZFSwhzRrnHeYbjeK6Kl2ixJlccTWDPCgs --server=https://api.rm3.7wse.p1.openshiftapps.com:6443
+          oc registry login --token=$OPENSHIFT_TOKEN --server=$OPENSHIFT_SERVER_URL
       
       # Step 5 : Switching to Correct Openshift project namespace
       - name: Switch to OpenShift project
