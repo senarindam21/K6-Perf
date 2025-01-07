@@ -17,7 +17,7 @@ jobs:
       # Step 4: Log in to OpenShift internal registry
       - name: Log in to OpenShift internal registry
         run: |
-          oc registry login --token=$OPENSHIFT_TOKEN --server=$OPENSHIFT_SERVER_URL
+          oc registry login --token=sha256~axBcJeHGRzZFSwhzRrnHeYbjeK6Kl2ixJlccTWDPCgs --server=https://api.rm3.7wse.p1.openshiftapps.com:6443
       
       # Step 5 : Switching to Correct Openshift project namespace
       - name: Switch to OpenShift project
