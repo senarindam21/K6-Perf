@@ -21,7 +21,7 @@ jobs:
           OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
           insecure_skip_tls_verify: true
         run: |
-          oc login --server=$OPENSHIFT_SERVER_URL --token=$OPENSHIFT_TOKEN
+          oc login $OPENSHIFT_SERVER_URL --token=$OPENSHIFT_TOKEN
 
       # Step 4: Log in to OpenShift internal registry
       - name: Log in to OpenShift internal registry
