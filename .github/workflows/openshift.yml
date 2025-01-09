@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       # Step 1: Checkout the repository
@@ -22,53 +22,53 @@ jobs:
         run: |
           oc login $OPENSHIFT_SERVER_URL --token=$OPENSHIFT_TOKEN
 
-      # Step 4: Log in to OpenShift internal registry
+      # Step 3: Log in to OpenShift internal registry
       - name: Log in to OpenShift internal registry
         run: |
           oc registry login --token=$OPENSHIFT_TOKEN --server=$OPENSHIFT_SERVER_URL
       
-      # Step 5 : Switching to Correct Openshift project namespace
+      # Step 4 : Switching to Correct Openshift project namespace
       - name: Switch to OpenShift project
         env:
           OPENSHIFT_PROJECT: ${{ secrets.OPENSHIFT_PROJECT }}
         run: |
           oc project $OPENSHIFT_PROJECT
           
-      # Step 6: Create the POD using YAML & Execute K6 test
+      # Step 5: Create the POD using YAML & Execute K6 test
       - name: Create the k6 test POD
         run: |
           oc apply -f ./k6-pod.yaml
 
-      # Step 7: Capture POD name & Status & Apply Condition based on POD Status
+      # Step 6: Capture POD name & Status & Apply Condition based on POD Status
       - name: Display POD name & Current Status
         run: |
-          POD_NAME=$(kubectl get pods -o jsonpath='{.items[0].metadata.name}')
+          POD_NAME=$(oc get pods -o jsonpath='{.items[0].metadata.name}')
           echo "The Created POD is" $POD_NAME
-          POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
+          POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
           echo "Current POD status is" $POD_STATUS
           sleep 60
           while [[ "$POD_STATUS" != "Succeeded" ]]; do
-             POD_STATUS=$(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
+             POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
              echo "Test is in Progress with POD Status" $POD_STATUS
              sleep 30
           done
              echo "Test is Completed"
 
-      # Step 8: Retrieve POD logs
+      # Step 7: Retrieve POD logs
       - name: Retrieve POD logs
         run: |
           mkdir -p logs
-          POD_NAME=$(kubectl get pods -o jsonpath='{.items[0].metadata.name}')
+          POD_NAME=$(oc get pods -o jsonpath='{.items[0].metadata.name}')
           kubectl logs $POD_NAME > logs/pod.log
 
-      # Step 9: Upload POD logs to Github
+      # Step 8: Upload POD logs to Github
       - name: Upload POD logs
         uses: actions/upload-artifact@v4
         with:
           name: pod-logs
           path: logs/
 
-      # Step 10: Delete Openshift Job
+      # Step 9: Delete Openshift Job
       - name: Delete OpenShift Job
         run: |
           oc delete job k6-demopnv
