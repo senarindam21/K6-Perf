@@ -1,5 +1,5 @@
 import http from "k6/http";
-import { check, status, group, sleep } from "k6";
+import {check} from "k6";
 import {baseURL} from "../main.js";
 import {findBetween} from "../utils.js"
 
@@ -17,7 +17,7 @@ let call1 = function(){
     headers["scheme"] = "https";
     //let endpoint = "https://fake-json-api.mock.beeceptor.com/users";
     let endpoint = baseURL + "/users";
-    let response = http.get(endpoint, {headers: headers, tags:{name:tagname, RT: tagname, TPS: tagname}});
+    let response = http.get(endpoint, {headers: headers, tags:{Checks:tagname, RT: tagname, TPS: tagname, FR: tagname}});
 
     const message = findBetween(response.body, '\"photo\": \"', '\"');
     console.log("Message is: " +message);
@@ -38,7 +38,7 @@ let call2 = function(){
     headers["scheme"] = "https";
     //let endpoint = "https://fake-json-api.mock.beeceptor.com/companies";
     let endpoint = baseURL +"/companies";
-    let response = http.get(endpoint, {headers: headers, tags:{name:tagname, RT: tagname, TPS: tagname}});
+    let response = http.get(endpoint, {headers: headers, tags:{Checks:tagname, RT: tagname, TPS: tagname, FR: tagname}});
 
     ChecksandDebug(response, endpoint, tagname);
 }
@@ -56,7 +56,7 @@ let call3 = function(){
     headers["scheme"] = "https";
     //let endpoint = "https://dummy-json.mock.beeceptor.com/todos";
     let endpoint = baseURL + "/todos";
-    let response = http.get(endpoint, {headers: headers, tags:{name:tagname, RT: tagname, TPS: tagname}});
+    let response = http.get(endpoint, {headers: headers, tags:{Checks:tagname, RT: tagname, TPS: tagname, FR: tagname}});
 
     ChecksandDebug(response, endpoint, tagname);
 }
@@ -74,7 +74,7 @@ let call4 = function(){
     headers["scheme"] = "https";
     //let endpoint = "https://dummy-json.mock.beeceptor.com/posts";
     let endpoint = baseURL + "/posts";
-    let response = http.get(endpoint, {headers: headers, tags:{name:tagname, RT: tagname, TPS: tagname}});
+    let response = http.get(endpoint, {headers: headers, tags:{Checks:tagname, RT: tagname, TPS: tagname, FR: tagname}});
 
     ChecksandDebug(response, endpoint, tagname);
 }
@@ -92,7 +92,7 @@ let call5 = function(){
     headers["scheme"] = "https";
     //let endpoint = "https://dummy-json.mock.beeceptor.com/continents";
     let endpoint = baseURL + "/continents";
-    let response = http.get(endpoint, {headers: headers, tags:{name:tagname, RT: tagname, TPS: tagname}});
+    let response = http.get(endpoint, {headers: headers, tags:{Checks:tagname, RT: tagname, TPS: tagname, FR: tagname}});
 
     ChecksandDebug(response, endpoint, tagname);
 }

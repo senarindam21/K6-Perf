@@ -5,7 +5,6 @@ const configFile = JSON.parse(open("../DemoService/config/env.json"));
 let env = `${__ENV.ENV}`;
 let steadyState = (__ENV.STEADYSTATE);
 let configJson = configFile[env];
-
 let baseURL = configJson.url;
 
 export {baseURL, configJson}
