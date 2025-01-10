@@ -48,7 +48,7 @@ jobs:
           echo "Current POD status is" $POD_STATUS          
           while [[ "$POD_STATUS" == "Pending" ]]; do
           POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
-          sleep 60
+          sleep 50
           done
           if [ "$POD_STATUS" == "Failed" ]; then
           echo "Pod $POD_NAME has failed"
@@ -56,9 +56,9 @@ jobs:
           POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
           echo "Now POD status is" $POD_STATUS
           while [[ "$POD_STATUS" == "Running" ]]; do
-             POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
              echo "Test is in Progress with POD Status" $POD_STATUS
              sleep 30
+             POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
           done
              echo "Test is Completed"
           
