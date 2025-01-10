@@ -45,14 +45,15 @@ jobs:
           POD_NAME=$(oc get pods -o jsonpath='{.items[0].metadata.name}')
           echo "The Created POD is" $POD_NAME
           POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
-          echo "Current POD status is" $POD_STATUS
-          sleep 20
-          if [ "$POD_STATUS" == "Pending" ]; then
-          sleep 30
-          fi
+          echo "Current POD status is" $POD_STATUS          
+          while [[ "$POD_STATUS" == "Pending" ]]; do
+          POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
+          sleep 60
+          done
           if [ "$POD_STATUS" == "Failed" ]; then
           echo "Pod $POD_NAME has failed"
           fi
+          POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
           echo "Now POD status is" $POD_STATUS
           while [[ "$POD_STATUS" == "Running" ]]; do
              POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
