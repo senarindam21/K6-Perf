@@ -41,8 +41,8 @@ spec:
             memory: 1G
             cpu: '1'
           limits:
-            memory: 2G
-            cpu: '2'
+            memory: 3G
+            cpu: '3'
       restartPolicy: Never
       volumes:
         - name: git
