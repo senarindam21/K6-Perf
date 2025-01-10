@@ -48,7 +48,7 @@ jobs:
           echo "Current POD status is" $POD_STATUS          
           while [[ "$POD_STATUS" == "Pending" ]]; do
           POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
-          sleep 50
+          sleep 40
           done
           if [ "$POD_STATUS" == "Failed" ]; then
           echo "Pod $POD_NAME has failed"
@@ -77,6 +77,6 @@ jobs:
           path: logs/
 
       # Step 9: Delete Openshift Job
-      - name: Delete OpenShift Job
-        run: |
-          oc delete job k6-demopnv
+      #- name: Delete OpenShift Job
+      #  run: |
+       #   oc delete job k6-demopnv
