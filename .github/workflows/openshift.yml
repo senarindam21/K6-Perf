@@ -51,6 +51,8 @@ jobs:
           sleep 30
           elif [ "$POD_STATUS" == "Failed" ] then
           echo "Pod $POD_NAME has failed"
+          else
+          echo "POD status is" $POD_STATUS
           fi
           if [ "$POD_STATUS" == "Running" ]; then
           while [[ "$POD_STATUS" != "Succeeded" ]]; do
