@@ -57,6 +57,7 @@ jobs:
              echo "Test is in Progress with POD Status" $POD_STATUS
              sleep 30
           done
+          else
              echo "Test is Completed"
           fi
           
