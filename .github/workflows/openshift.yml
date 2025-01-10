@@ -46,14 +46,21 @@ jobs:
           echo "The Created POD is" $POD_NAME
           POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
           echo "Current POD status is" $POD_STATUS
-          sleep 60
+          sleep 30
+          if [ "$POD_STATUS" == "Pending" ]; then
+          sleep 30
+          elseif [ "$POD_STATUS" == "Failed" ] then
+          echo "Pod $POD_NAME has failed"
+          fi
+          if [ "$POD_STATUS" == "Running" ]; then
           while [[ "$POD_STATUS" != "Succeeded" ]]; do
              POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
              echo "Test is in Progress with POD Status" $POD_STATUS
              sleep 30
           done
              echo "Test is Completed"
-
+          fi
+          
       # Step 7: Retrieve POD logs
       - name: Retrieve POD logs
         run: |
