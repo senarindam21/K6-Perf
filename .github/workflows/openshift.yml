@@ -49,7 +49,7 @@ jobs:
           sleep 30
           if [ "$POD_STATUS" == "Pending" ]; then
           sleep 30
-          elseif [ "$POD_STATUS" == "Failed" ] then
+          elif [ "$POD_STATUS" == "Failed" ] then
           echo "Pod $POD_NAME has failed"
           fi
           if [ "$POD_STATUS" == "Running" ]; then
