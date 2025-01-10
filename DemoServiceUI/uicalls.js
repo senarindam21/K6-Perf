@@ -1,11 +1,16 @@
 import { check } from 'k6'
 import http from "k6/http";
+import { Rate, Counter } from 'k6/metrics';
+import { baseURL, configJson, DebugMessage } from "../DemoServiceUI/main.js";
 
 const vars = {}
+let loginstatus = 0;
+const failedRequests = new Rate('http_req_failed');
+const failCount = new Counter('FailCount');
 
   let launchpage = function () {
     let tagname = "T01_Demo_K6LaunchPage"
-    let response = http.get('https://test.k6.io/', {
+    let response = http.get(baseURL, {
       headers: {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'Accept-Encoding': 'gzip, deflate, br, zstd',
@@ -21,7 +26,7 @@ const vars = {}
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"'   
       },
-      tags: {name: tagname, RT: tagname, TPS: tagname}
+      tags: {Checks: tagname, RT: tagname, TPS: tagname, FR: tagname}
     })
 
     ChecksandDebug(response, tagname);
@@ -29,7 +34,7 @@ const vars = {}
 
   let loginpage = function () {
     let tagname = "T02_Demo_K6LoginPage"
-    let response = http.get('https://test.k6.io/my_messages.php', {
+    let response = http.get(baseURL +'/my_messages.php', {
       headers: {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'Accept-Encoding': 'gzip, deflate, br, zstd',
@@ -45,7 +50,7 @@ const vars = {}
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"'
       },
-      tags: {name: tagname, RT: tagname, TPS: tagname}
+      tags: {Checks: tagname, RT: tagname, TPS: tagname, FR: tagname}
     })
 
     vars['redir1'] = response.html().find('input[name=redir]').first().attr('value')
@@ -57,14 +62,17 @@ const vars = {}
   }
 
 let login = function () {
+  let username = configJson.creds.username;
+  let password = configJson.creds.password;
+
    let tagname = "T03_Demo_K6Login"
    let response = http.post(
-      'https://test.k6.io/login.php',
+    baseURL + '/login.php',
       {
         redir: `${vars['redir1']}`,
         csrftoken: `${vars['csrftoken1']}`,
-        login: 'admin',
-        password: '123',
+        login: `${username}`, //admin
+        password: `${password}`, //123
       },
       {
         headers: {
@@ -85,11 +93,11 @@ let login = function () {
           'sec-ch-ua-mobile': '?0',
           'sec-ch-ua-platform': '"Windows"'  
         },
-        //tags: {name: tagname, RT: tagname, TPS: tagname}
+       // tags: {name: tagname, RT: tagname, TPS: tagname}
       }
     )
-
-    response = http.get('https://test.k6.io/my_messages.php', {
+    
+    response = http.get(baseURL + '/my_messages.php', {
       headers: {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'Accept-Encoding': 'gzip, deflate, br, zstd',
@@ -106,20 +114,24 @@ let login = function () {
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"'
       },
-      tags: {name: tagname, RT: tagname, TPS: tagname}
+      tags: {Checks: tagname, RT: tagname, TPS: tagname, FR: tagname}
     })
 
     vars['redir2'] = response.html().find('input[name=redir]').first().attr('value')
 
     vars['csrftoken2'] = response.html().find('input[name=csrftoken]').first().attr('value')
+    //console.log("Config Username: ",username);
+    //console.log("Config Password: ",password);
 
-    ChecksandDebug(response, tagname);
+    ChecksandDebugLogin(response, tagname);
   }
+
+  
 
 let logout = function () {
     let tagname = "T04_Demo_K6Logout"
     let response = http.post(
-      'https://test.k6.io/login.php',
+      baseURL + '/login.php',
       {
         redir: `${vars['redir2']}`,
         csrftoken: `${vars['csrftoken2']}`,
@@ -147,7 +159,7 @@ let logout = function () {
       }
     )
 
-    response = http.get('https://test.k6.io/my_messages.php', {
+    response = http.get(baseURL + '/my_messages.php', {
       headers: {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'Accept-Encoding': 'gzip, deflate, br, zstd',
@@ -164,7 +176,7 @@ let logout = function () {
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Windows"'
       },
-      tags: {name: tagname, RT: tagname, TPS: tagname}
+      tags: {Checks: tagname, RT: tagname, TPS: tagname, FR: tagname}
     })
     ChecksandDebug(response, tagname);
   }
@@ -176,6 +188,7 @@ let logout = function () {
     else{
         check(response, {Validation: (r) => r.status ==200 || r.status ==302}, {Checks:tagname});
         console.log(`${tagname} failed with status code: `, response.status);
+        failCount.add(!success, {FR: tagname})
 
     if(DebugMessage == "yes"){
         console.log("Transaction Name: "+tagname)
@@ -184,6 +197,29 @@ let logout = function () {
     }
 }
 
+function ChecksandDebugLogin (response, tagname){
+
+  if(response.body.includes('Welcome')){
+    check(response, {Validation: (r) => r.body.includes('Welcome, admin!')}, {Checks:tagname})
+    loginstatus = 1
+  
+  }
+
+  else{
+    let success = check(response, {Validation: (r) => r.body.includes(!('Welcome'))}, {Checks:tagname});
+    
+    console.log(`${tagname} failed: Unable to Login `);
+    failCount.add(!success, {FR: tagname})
+   
+    if(DebugMessage == "yes"){
+      console.log("Transaction Name: "+tagname)
+      console.log("Response Body for debug: ", tagname, response.body);
+   }
+   
+}
+
+}
+export {loginstatus}
   export default Object.freeze({
 
     launchpage,

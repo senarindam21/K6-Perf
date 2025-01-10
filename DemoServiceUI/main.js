@@ -1,14 +1,15 @@
 export {callList} from "../DemoServiceUI/group.js";
 
-//const configFile = JSON.parse(open("../OriginalService/config/env.json"));
+const configFile = JSON.parse(open("../DemoServiceUI/config/env.json"));
 
-//let env = `${__ENV.ENV}`;
+let env = `${__ENV.ENV}`;
 let steadyState = (__ENV.STEADYSTATE);
-//let configJson = configFile[env];
+let configJson = configFile[env];
 
-//let baseURL = configJson.url;
-
-//export {baseURL, configJson}
+let baseURL = configJson.url;
+export {baseURL, configJson}
+let DebugMessage = "yes"
+export {DebugMessage}
 
 let perfscenarios = {
       LoadTest: {
@@ -37,23 +38,27 @@ let perfscenarios = {
 
     'http_req_duration{RT:T01_Demo_K6LaunchPage}': ['p(95) < 500'],
     'checks{Checks:T01_Demo_K6LaunchPage}': ['rate == 1'],
-    'http_req_failed{FR:T01_Demo_K6LaunchPage}':['rate < 0'],
+    //'http_req_failed{FR:T01_Demo_K6LaunchPage}':['rate == 0'],
     'http_reqs{TPS:T01_Demo_K6LaunchPage}' : ['rate > 0'],
+    'FailCount{FR:T01_Demo_K6LaunchPage}':['rate == 0'],
 
     'http_req_duration{RT:T02_Demo_K6LoginPage}': ['p(95) < 500'],
     'checks{Checks:T02_Demo_K6LoginPage}': ['rate == 1'],
-    'http_req_failed{FR:T02_Demo_K6LoginPage}':['rate < 0'],
+    //'http_req_failed{FR:T02_Demo_K6LoginPage}':['rate == 0'],
     'http_reqs{TPS:T02_Demo_K6LoginPage}' : ['rate > 0'],
+    'FailCount{FR:T02_Demo_K6LoginPage}':['rate == 0'],
 
     'http_req_duration{RT:T03_Demo_K6Login}': ['p(95) < 500'],
     'checks{Checks:T03_Demo_K6Login}': ['rate == 1'],
-    'http_req_failed{FR:T03_Demo_K6Login}':['rate < 0'],
+    //'http_req_failed{FR:T03_Demo_K6Login}':['rate == 0'],
     'http_reqs{TPS:T03_Demo_K6Login}' : ['rate > 0'],
+    'FailCount{FR:T03_Demo_K6Login}':['rate == 0'],
 
     'http_req_duration{RT:T04_Demo_K6Logout}': ['p(95) < 500'],
     'checks{Checks:T04_Demo_K6Logout}': ['rate == 1'],
-    'http_req_failed{FR:T04_Demo_K6Logout}':['rate < 0'],
-    'http_reqs{TPS:T04_Demo_K6Logout}' : ['rate > 0']
+    //'http_req_failed{FR:T04_Demo_K6Logout}':['rate == 0'],
+    'http_reqs{TPS:T04_Demo_K6Logout}' : ['rate > 0'],
+    'FailCount{FR:T04_Demo_K6Logout}':['rate == 0']
   }
 
   export let options = {
