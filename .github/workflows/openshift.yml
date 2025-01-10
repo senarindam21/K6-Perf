@@ -49,15 +49,16 @@ jobs:
           sleep 20
           if [ "$POD_STATUS" == "Pending" ]; then
           sleep 30
-          elif [ "$POD_STATUS" == "Failed" ]; then
+          fi
+          if [ "$POD_STATUS" == "Failed" ]; then
           echo "Pod $POD_NAME has failed"
-          elif [ "$POD_STATUS" == "Running" ]; then
+          fi
+          if [ "$POD_STATUS" == "Running" ]; then
           while [[ "$POD_STATUS" != "Succeeded" ]]; do
              POD_STATUS=$(oc get pod $POD_NAME -o jsonpath='{.status.phase}')
              echo "Test is in Progress with POD Status" $POD_STATUS
              sleep 30
           done
-          else
              echo "Test is Completed"
           fi
           
