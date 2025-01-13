@@ -16,10 +16,10 @@ let perfscenarios = {
         startRate: 1 * 1,
         timeUnit: (1 * 1) + 's',
         preAllocatedVUs: 1,
-        maxVUs: 5,
+        maxVUs: 50,
         stages: [
           { target: 1 * 1, duration: '10s' },
-          { target: 1 * 1, duration: steadyState }
+          { target: 50 * 1, duration: steadyState }
         ],
       },
 
