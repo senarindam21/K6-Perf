@@ -38,11 +38,11 @@ spec:
             name: git
         resources:
           requests:
-            memory: 1Gi
-            cpu: '1'
+            memory: 50Mi
+            cpu: '500m'
           limits:
-            memory: 2Gi
-            cpu: '2'
+            memory: 75Mi
+            cpu: '1'
       restartPolicy: Never
       volumes:
         - name: git
