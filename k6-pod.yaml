@@ -31,7 +31,7 @@ spec:
       containers:
       - name: k6-demopnv
         image: image-registry.openshift-image-registry.svc:5000/senarindam21-dev/k6-image:v0.53.0
-        command: ['sh', '-c', 'k6 run /tmp/DemoService/main.js -e STEADYSTATE=3m -e scenario="LoadTest" -e ENV="qa"']
+        command: ['sh', '-c', 'k6 run /tmp/DemoServiceUI/main.js --no-thresholds -e STEADYSTATE=3m -e scenario="LoadTest" -e ENV="qa"']
         volumeMounts:
           - mountPath: /tmp
             readOnly: false
@@ -43,7 +43,7 @@ spec:
           limits:
             memory: 75Mi
             cpu: '1'
-      restartPolicy: Never
+      restartPolicy: Always
       volumes:
         - name: git
           emptyDir: {}
