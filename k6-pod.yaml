@@ -41,7 +41,7 @@ spec:
             memory: 50Mi
             cpu: '500m'
           limits:
-            memory: 100Mi
+            memory: 75Mi
             cpu: '1'
       restartPolicy: Never
       volumes:
