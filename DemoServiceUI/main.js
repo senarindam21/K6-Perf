@@ -16,12 +16,12 @@ let perfscenarios = {
         executor: 'ramping-arrival-rate',
         exec:"callList",
         startRate: 1 * 1,
-        timeUnit: (1 * 1) + 's',
+        timeUnit: (1 * 0.1) + 's',
         preAllocatedVUs: 1,
-        maxVUs: 2,
+        maxVUs: 100,
         stages: [
-          { target: 1 * 1, duration: '10s' },
-          { target: 1 * 1, duration: steadyState }
+          { target: 50 * 1, duration: '10s' },
+          { target: 100 * 1, duration: steadyState }
         ],
       },
 
