@@ -43,7 +43,7 @@ spec:
           limits:
             memory: 75Mi
             cpu: '1'
-      restartPolicy: Always
+      restartPolicy: OnFailure
       volumes:
         - name: git
           emptyDir: {}
