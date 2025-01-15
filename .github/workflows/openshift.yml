@@ -77,6 +77,6 @@ jobs:
           path: logs/
 
       # Step 9: Delete Openshift Job
-      #- name: Delete OpenShift Job
-      #  run: |
-       #   oc delete job k6-demopnv
+      - name: Delete OpenShift Job
+        run: |
+          oc delete job k6-demopnv
