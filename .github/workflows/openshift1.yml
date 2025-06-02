@@ -22,8 +22,6 @@ jobs:
 
       # Step 3: Run K6 test
       - name: Run local k6 test
-        uses: grafana/run-k6-action@v1
-        with:
-          path: DemoService/main.js -e STEADYSTATE=3m -e scenario="LoadTest" -e ENV="qa"
+        run: k6 run DemoService/main.js -e STEADYSTATE=3m -e scenario="LoadTest" -e ENV="qa"
           
      
