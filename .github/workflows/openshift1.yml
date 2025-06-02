@@ -20,7 +20,7 @@ jobs:
       - name: Setup K6
         uses: grafana/setup-k6-action@v1
 
-      # Step 3: Run K6 test locally
+      # Step 3: Run K6 test
       - name: Run local k6 test
         uses: grafana/run-k6-action@v1
         with:
