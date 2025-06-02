@@ -1,4 +1,4 @@
-name: Build and Execute K6 Tests on OpenShift
+name: Build and Execute K6 Tests using GHA
 
 on:
   push:
