@@ -1,0 +1,29 @@
+name: Build and Execute K6 Tests on OpenShift
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/openshift1.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Setup K6
+      - name: Setup K6
+        uses: grafana/setup-k6-action@v1
+
+      # Step 3: Run K6 test locally
+      - name: Run local k6 test
+        uses: grafana/run-k6-action@v1
+        with:
+          path: /DemoService/main.js
+          
+     
