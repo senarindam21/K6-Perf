@@ -23,5 +23,12 @@ jobs:
       # Step 3: Run K6 test
       - name: Run local k6 test
         run: k6 run DemoService/main.js --no-thresholds -e STEADYSTATE=1m -e scenario="LoadTest" -e ENV="qa"
+
+      # Step 4: Monitor Runner CPU & Memory
+      - name: Log CPU and Memory Usage (before)
+        run: |
+         echo "CPU and Memory usage before tests:"
+         top -b -n 1 | head -20
+         free -m
           
      
