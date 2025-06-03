@@ -10,6 +10,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-22.04
+    container:
+      image: docker pull grafana/k6:v0.53.0
+      options: --user root
 
     steps:
       # Step 1: Checkout the repository
@@ -17,8 +20,8 @@ jobs:
         uses: actions/checkout@v2
 
       # Step 2: Setup K6 
-      - name: Setup K6
-        uses: grafana/setup-k6-action@v1
+      #- name: Setup K6
+      #  uses: grafana/setup-k6-action@v1
 
       # Step 3: Run K6 test
       - name: Run local k6 test
