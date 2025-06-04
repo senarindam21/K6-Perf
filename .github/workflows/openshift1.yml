@@ -11,7 +11,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-22.04
     container:
-      image: docker.io/grafana/k6:v0.53.0
+      image: grafana/k6:v0.53.0
       options: --user root
 
     steps:
