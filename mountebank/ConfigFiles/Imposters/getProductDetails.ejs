@@ -1,0 +1,99 @@
+/**
+ * Get Product Details Function
+ * This function handles the retrieval of product details from files or state
+ */
+module.exports=function(request, state, logger) {
+    var fs = require('fs');
+    var path = require('path');
+    //var url = require('url');
+    
+    // Parse query parameters to get productId
+    //var parsedUrl = url.parse(request.url, true);
+    //var productId = parsedUrl.query.productId;
+    var productId = request.query.productId || request.body.productId;
+    
+    // Log the request details for debugging
+    //logger.info('GetProductDetails - Request URL: ' + request.url);
+    logger.info('GetProductDetails - ProductId: ' + productId);
+    
+    // Validate productId parameter
+    if (!productId) {
+        return {
+            statusCode: 400,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                success: false,
+                error: 'BAD_REQUEST',
+                message: 'Product ID is required'
+            }
+        };
+    }
+    
+    // Try to read product from JSON file first
+    try {
+        var productsDir = path.resolve('products');
+        var filePath = path.join(productsDir, productId + '.json');
+        logger.info('GetProductDetails - Looking for file: ' + filePath);
+        logger.info('GetProductDetails - Products directory: ' + productsDir);
+        
+        if (fs.existsSync(filePath)) {
+            var data = fs.readFileSync(filePath, 'utf8');
+            var product = JSON.parse(data);
+            
+            logger.info('Product loaded from file: ' + filePath);
+            
+            return {
+                statusCode: 200,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'public, max-age=300'
+                },
+                body: {
+                    success: true,
+                    message: 'Product details retrieved successfully',
+                    data: product
+                }
+            };
+        } else {
+            logger.info('GetProductDetails - File does not exist: ' + filePath);
+        }
+    } catch (error) {
+        logger.error('File read error: ' + error.message);
+    }
+    
+    // Fallback to state if file doesn't exist
+    if (state.products && state.products[productId]) {
+        var product = state.products[productId];
+        
+        logger.info('Product loaded from state: ' + productId);
+        
+        return {
+            statusCode: 200,
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'public, max-age=300'
+            },
+            body: {
+                success: true,
+                message: 'Product details retrieved successfully (from state)',
+                data: product
+            }
+        };
+    }
+    
+    // Product not found
+    logger.info('GetProductDetails - Product not found: ' + productId);
+    return {
+        statusCode: 404,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: {
+            success: false,
+            error: 'PRODUCT_NOT_FOUND',
+            message: 'Product with ID ' + productId + ' not found'
+        }
+    };
+}

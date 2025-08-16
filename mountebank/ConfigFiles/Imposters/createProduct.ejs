@@ -1,0 +1,170 @@
+/**
+ * Create Product Function
+ * This function handles the creation of new products and saves them to files and state
+ */
+module.exports=function(request, state, logger) {
+    var fs = require('fs');
+    var path = require('path');
+    
+    // Generate dynamic product ID
+    var productId = 'PROD-' + Math.floor(Math.random() * 900000 + 100000) + '-2025';
+    
+    // Log the entire request body for debugging
+    logger.info("Request body: " + JSON.stringify(request.body));
+    logger.info("Request body type: " + typeof request.body);
+    
+    // Check if request.body is a string that needs parsing
+    var parsedBody;
+    if (typeof request.body === 'string') {
+        try {
+            parsedBody = JSON.parse(request.body);
+            logger.info("Parsed body from string: " + JSON.stringify(parsedBody));
+        } catch (e) {
+            logger.error("Failed to parse request body as JSON: " + e.message);
+            parsedBody = request.body;
+        }
+    } else {
+        parsedBody = request.body;
+    }
+    
+    // Extract category value using different methods
+    var category;
+    
+        
+    // Check all properties
+   /* logger.info("All properties in parsedBody:");
+    for (var key in parsedBody) {
+        if (parsedBody.hasOwnProperty(key)) {
+            logger.info("  " + key + ": " + parsedBody[key] + " (type: " + typeof parsedBody[key] + ")");
+        }
+    }*/
+    
+    // Use the parsed body for final extraction
+    category = parsedBody.category;
+    //logger.info("Final category value: '" + category + "' (type: " + typeof category + ")");
+    
+    // Validate that category is not null, undefined, or empty
+    if (!category || category === null || category === undefined) {
+        logger.error("Category is missing or null/undefined");
+        return {
+            statusCode: 400,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                success: false,
+                error: 'VALIDATION_ERROR',
+                message: 'Category is required and cannot be null or undefined'
+            }
+        };
+    }
+    
+    // Additional validation for string type and trim whitespace
+    if (typeof category === 'string' && category.trim() === '') {
+        logger.error("Category is empty string or only whitespace");
+        return {
+            statusCode: 400,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                success: false,
+                error: 'VALIDATION_ERROR',
+                message: 'Category cannot be empty or contain only whitespace'
+            }
+        };
+    }
+    var currency = parsedBody.currency;
+    var basePrice = parsedBody.basePrice;
+    var currentPrice = parsedBody.currentPrice;
+    var productName = parsedBody.productName;
+    var subCategory = parsedBody.subCategory;
+    var brand = parsedBody.brand;
+    var description = parsedBody.description;
+    var currency = parsedBody.currency; 
+
+    // Create product data object
+    /*var productData = {
+        productId: productId,
+        productCode: 'PROD-CODE-' + Math.floor(Math.random() * 900 + 100),
+        productName: 'Samsung Galaxy Ultra Pro Max',
+        status: 'ACTIVE',
+        category: 'Electronics',
+        subCategory: 'Smartphones',
+        brand: 'Samsung',
+        description: 'Latest flagship smartphone with advanced features',
+        createdAt: new Date().toISOString(),
+        pricing: {
+            currency: 'USD',
+            basePrice: 1299.99,
+            currentPrice: 1299.99
+        },
+        inventory: {
+            totalStock: Math.floor(Math.random() * 100) + 50,
+            availableStock: Math.floor(Math.random() * 80) + 20
+        },
+        qrCode: 'https://api.productservice.com/qr/' + productId,
+        deepLink: 'productapp://product/' + productId
+    };*/
+
+    // code added manually
+    var productData = {
+        productId: productId,
+        productCode: 'PROD-CODE-' + Math.floor(Math.random() * 900 + 100),
+        productName: productName,
+        status: 'ACTIVE',
+        category: category,
+        subCategory: subCategory,
+        brand: brand,
+        description: description,
+        createdAt: new Date().toISOString(),
+        pricing: {
+            currency: currency,
+            basePrice: basePrice,
+            currentPrice: currentPrice
+        },
+        inventory: {
+            totalStock: Math.floor(Math.random() * 100) + 50,
+            availableStock: Math.floor(Math.random() * 80) + 20
+        },
+        qrCode: 'https://api.productservice.com/qr/' + productId,
+        deepLink: 'productapp://product/' + productId
+    };
+    
+    // Save to JSON file
+    try {
+        var productsDir = path.resolve('products');
+        
+        // Create products directory if it doesn't exist
+        if (!fs.existsSync(productsDir)) {
+            fs.mkdirSync(productsDir);
+        }
+        
+        var filePath = path.join(productsDir, productId + '.json');
+        fs.writeFileSync(filePath, JSON.stringify(productData, null, 2));
+        
+        logger.info('Product saved to: ' + filePath);
+    } catch (error) {
+        logger.error('File save error: ' + error.message);
+    }
+    
+    // Save to state as well
+    if (!state.products) {
+        state.products = {};
+    }
+    state.products[productId] = productData;
+    
+    // Return success response
+    return {
+        statusCode: 201,
+        headers: {
+            'Content-Type': 'application/json',
+            'Location': '/api/getProductDetails?productId=' + productId
+        },
+        body: {
+            success: true,
+            message: 'Product created successfully',
+            data: productData
+        }
+    };
+}

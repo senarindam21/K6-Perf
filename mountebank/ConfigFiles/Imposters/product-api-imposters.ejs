@@ -1,0 +1,499 @@
+
+    {
+      "port": 8080,
+      "protocol": "http",
+      "name": "Product Service API - HTTP",
+      "recordRequests": true,
+      "stubs": [
+        {
+          "_comment": "Create Product - Success Case",
+          "predicates": [
+            {
+              "equals": {
+                "method": "POST",
+                "path": "/api/createProduct"
+              }
+            },
+            {
+              "exists": {
+                "headers": {
+                  "authorization": true
+                }
+              }
+            },
+            {
+              "exists": {
+                "body": {
+                  "productName": true,
+                  "category": true,
+                  "brand": true
+                }
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "<%- stringify(filename, './createProduct.ejs') %>",
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 500) + 1000 %>"
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Create Product - Missing Required Fields",
+          "predicates": [
+            {
+              "equals": {
+                "method": "POST",
+                "path": "/api/createProduct"
+              }
+            },
+            {
+              "or": [
+                {
+                  "not": {
+                    "exists": {
+                      "body": {
+                        "productName": true
+                      }
+                    }
+                  }
+                },
+                {
+                  "not": {
+                    "exists": {
+                      "body": {
+                        "category": true
+                      }
+                    }
+                  }
+                },
+                {
+                  "not": {
+                    "exists": {
+                      "body": {
+                        "brand": true
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 400,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "X-Request-ID": "REQ-<%= new Date().getTime() %>-<%= Math.random().toString(36).substr(2, 9) %>"
+                },
+                "body": {
+                  "success": false,
+                  "message": "Validation failed",
+                  "errors": [
+                    {
+                      "field": "productName",
+                      "message": "Product name is required and must not be empty",
+                      "code": "FIELD_REQUIRED"
+                    },
+                    {
+                      "field": "category",
+                      "message": "Category is required",
+                      "code": "FIELD_REQUIRED"
+                    },
+                    {
+                      "field": "brand",
+                      "message": "Brand is required",
+                      "code": "FIELD_REQUIRED"
+                    }
+                  ],
+                  "errorCode": "VALIDATION_ERROR",
+                  "timestamp": "<%= new Date().toISOString() %>"
+                }
+              },
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 500) + 1000 %>"
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Create Product - Unauthorized",
+          "predicates": [
+            {
+              "equals": {
+                "method": "POST",
+                "path": "/api/createProduct"
+              }
+            },
+            {
+              "not": {
+                "exists": {
+                  "headers": {
+                    "authorization": true
+                  }
+                }
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 401,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "WWW-Authenticate": "Bearer realm=\"Product API\""
+                },
+                "body": {
+                  "success": false,
+                  "message": "Unauthorized access",
+                  "error": "Missing or invalid authorization header",
+                  "errorCode": "UNAUTHORIZED",
+                  "timestamp": "<%= new Date().toISOString() %>"
+                }
+              },
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 500) + 1000 %>"
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Get Product Details - Success Case for Created Product",
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/api/getProductDetails"
+              }
+            },
+            {
+              "equals": {
+                "query": {
+                  "productId": "PROD-123456-2025"
+                }
+              }
+            },
+            {
+              "exists": {
+                "headers": {
+                  "authorization": true
+                }
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 200,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Cache-Control": "public, max-age=300",
+                  "ETag": "\"<%= Math.random().toString(36).substr(2, 9) %>\"",
+                  "X-Request-ID": "REQ-<%= new Date().getTime() %>-<%= Math.random().toString(36).substr(2, 9) %>",
+                  "X-Response-Time": "<%= Math.floor(Math.random() * 80) + 20 %>ms",
+                  "X-API-Version": "v1.0",
+                  "Last-Modified": "<%= new Date().toUTCString() %>"
+                },
+                "body": {
+                  "success": true,
+                  "message": "Product details retrieved successfully",
+                  "data": {
+                    "productId": "PROD-123456-2025",
+                    "productCode": "PROD-CODE-123",
+                    "productName": "Samsung Galaxy Ultra Pro Max",
+                    "category": "Electronics",
+                    "subCategory": "Smartphones",
+                    "brand": "Samsung",
+                    "description": "Latest flagship smartphone with advanced AI camera, 5G connectivity, and premium build quality.",
+                    "pricing": {
+                      "currency": "USD",
+                      "basePrice": 1299.99,
+                      "currentPrice": 1299.99,
+                      "msrp": 1399.99,
+                      "discountPercentage": <%= Math.floor(Math.random() * 25) %>,
+                      "savings": <%= Math.floor(Math.random() * 200) %>,
+                      "taxIncluded": false,
+                      "priceValidFrom": "<%= new Date().toISOString() %>",
+                      "priceValidTo": "<%= new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() %>"
+                    },
+                    "specifications": {
+                      "processor": {
+                        "chipset": "Snapdragon 8 Gen 3",
+                        "cores": "Octa-core",
+                        "gpu": "Adreno 750"
+                      },
+                      "display": {
+                        "size": "6.8 inches",
+                        "resolution": "3200 x 1440",
+                        "technology": "Dynamic AMOLED 2X",
+                        "refreshRate": "120Hz"
+                      },
+                      "memory": {
+                        "ram": "12GB",
+                        "ramType": "LPDDR5",
+                        "storage": "256GB",
+                        "storageType": "UFS 4.0",
+                        "expandable": true
+                      },
+                      "connectivity": {
+                        "wifi": "Wi-Fi 6E",
+                        "bluetooth": "Bluetooth 5.3",
+                        "network": "5G",
+                        "ports": ["USB-C", "3.5mm headphone jack"]
+                      },
+                      "design": {
+                        "dimensions": "163.4 x 78.1 x 8.9 mm",
+                        "weight": "234g",
+                        "materials": ["Aluminum Frame", "Gorilla Glass Victus 2"],
+                        "colors": ["Phantom Black", "Cream", "Green", "Lavender"]
+                      }
+                    },
+                    "inventory": {
+                      "stockQuantity": <%= Math.floor(Math.random() * 200) + 50 %>,
+                      "availability": "<%= Math.random() > 0.15 ? 'IN_STOCK' : 'OUT_OF_STOCK' %>",
+                      "warehouse": "WH-ELECTRONICS-<%= Math.random() > 0.5 ? 'PREMIUM-001' : 'STANDARD-002' %>",
+                      "lastRestocked": "<%= new Date(Date.now() - Math.floor(Math.random() * 15) * 24 * 60 * 60 * 1000).toISOString() %>",
+                      "reservedQuantity": <%= Math.floor(Math.random() * 30) + 5 %>,
+                      "availableQuantity": <%= Math.floor(Math.random() * 150) + 20 %>
+                    },
+                    "metadata": {
+                      "sku": "SKU-SAMSUNG-GALAXY-2025",
+                      "tags": ["smartphone", "5g", "android", "premium", "camera"],
+                      "warrantyPeriod": "12 months",
+                      "releaseDate": "<%= new Date(Date.now() + Math.floor(Math.random() * 60) * 24 * 60 * 60 * 1000).toISOString() %>",
+                      "createdAt": "<%= new Date(Date.now() - Math.floor(Math.random() * 90) * 24 * 60 * 60 * 1000).toISOString() %>",
+                      "updatedAt": "<%= new Date().toISOString() %>",
+                      "version": "1.<%= Math.floor(Math.random() * 10) %>"
+                    },
+                    "reviews": {
+                      "averageRating": <%= (Math.random() * 2 + 3).toFixed(1) %>,
+                      "totalReviews": <%= Math.floor(Math.random() * 500) + 50 %>,
+                      "ratingDistribution": {
+                        "5": <%= Math.floor(Math.random() * 100) + 50 %>,
+                        "4": <%= Math.floor(Math.random() * 50) + 20 %>,
+                        "3": <%= Math.floor(Math.random() * 20) + 5 %>,
+                        "2": <%= Math.floor(Math.random() * 10) + 2 %>,
+                        "1": <%= Math.floor(Math.random() * 5) + 1 %>
+                      }
+                    },
+                    "status": "ACTIVE"
+                  }
+                }
+              },
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 500) + 1000 %>"
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Get Product Details - General Case (Other Products)",
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/api/getProductDetails"
+              }
+            },
+            {
+              "exists": {
+                "query": {
+                  "productId": true
+                }
+              }
+            },
+            {
+              "exists": {
+                "headers": {
+                  "authorization": true
+                }
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "<%- stringify(filename, './getProductDetails.ejs') %>",
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 500) + 1000 %>"
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Get Product Details - Missing Product ID",
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/api/getProductDetails"
+              }
+            },
+            {
+              "not": {
+                "exists": {
+                  "query": {
+                    "productId": true
+                  }
+                }
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 400,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "X-Request-ID": "REQ-<%= new Date().getTime() %>-<%= Math.random().toString(36).substr(2, 9) %>"
+                },
+                "body": {
+                  "success": false,
+                  "message": "Bad Request",
+                  "error": "productId query parameter is required",
+                  "errorCode": "MISSING_PARAMETER",
+                  "timestamp": "<%= new Date().toISOString() %>"
+                }
+              },
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 500) + 1000 %>"
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Get Product Details - Product Not Found",
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/api/getProductDetails"
+              }
+            },
+            {
+              "or": [
+                {
+                  "equals": {
+                    "query": {
+                      "productId": "PROD-NOTFOUND-001"
+                    }
+                  }
+                },
+                {
+                  "matches": {
+                    "query": {
+                      "productId": ".*INVALID.*"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 404,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "X-Request-ID": "REQ-<%= new Date().getTime() %>-<%= Math.random().toString(36).substr(2, 9) %>"
+                },
+                "body": {
+                  "success": false,
+                  "message": "Product not found",
+                  "error": "No product found with the specified product ID",
+                  "errorCode": "PRODUCT_NOT_FOUND",
+                  "requestedProductId": "UNKNOWN",
+                  "timestamp": "<%= new Date().toISOString() %>"
+                }
+              },
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 500) + 1000 %>"
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Get Product Details - Unauthorized",
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/api/getProductDetails"
+              }
+            },
+            {
+              "not": {
+                "exists": {
+                  "headers": {
+                    "authorization": true
+                  }
+                }
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 401,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "WWW-Authenticate": "Bearer realm=\"Product API\""
+                },
+                "body": {
+                  "success": false,
+                  "message": "Unauthorized access",
+                  "error": "Missing or invalid authorization header",
+                  "errorCode": "UNAUTHORIZED",
+                  "timestamp": "<%= new Date().toISOString() %>"
+                }
+              },
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 500) + 1000 %>"
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Get Product Details - Cache Hit (304 Not Modified)",
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/api/getProductDetails"
+              }
+            },
+            {
+              "exists": {
+                "headers": {
+                  "if-none-match": true
+                }
+              }
+            },
+            {
+              "equals": {
+                "headers": {
+                  "if-none-match": "\"cached-etag-12345\""
+                }
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 304,
+                "headers": {
+                  "ETag": "\"cached-etag-12345\"",
+                  "Cache-Control": "public, max-age=300",
+                  "X-Request-ID": "REQ-<%= new Date().getTime() %>-<%= Math.floor(Math.random() * 10000) %>"
+                }
+              },
+              "_behaviors": {
+                "wait": "<%= Math.floor(Math.random() * 300) + 1000 %>"
+              }
+            }
+          ]
+        }
+      ]
+    }

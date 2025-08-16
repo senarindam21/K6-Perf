@@ -1,0 +1,517 @@
+{
+  "imposters": [
+    {
+      "port": 3005,
+      "protocol": "tcp",
+      "name": "Mock SMTP Server for JMeter (TCP-based)",
+      "mode": "text",
+      "recordRequests": true,
+      "allowCORS": true,
+      "defaultResponse": {
+        "data": "220 127.0.0.1 ESMTP Mock SMTP Server Ready\r\n"
+      },
+      "stubs": [
+        {
+          "_comment": "SMTP Welcome message - sent on connection",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^\\s*$"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "220 127.0.0.1 ESMTP Mock SMTP Server Ready\r\n"
+              },
+              "_behaviors": {
+                "wait": 100
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle EHLO commands",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^EHLO"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250-127.0.0.1 Hello client\r\n250-SIZE 52428800\r\n250-8BITMIME\r\n250-PIPELINING\r\n250-CHUNKING\r\n250-SMTPUTF8\r\n250 HELP\r\n"
+              },
+              "_behaviors": {
+                "wait": 100
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle HELO commands",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^HELO"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 127.0.0.1 Hello client\r\n"
+              },
+              "_behaviors": {
+                "wait": 100
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle MAIL FROM commands",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^MAIL FROM:"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 2.1.0 Sender OK\r\n"
+              },
+              "_behaviors": {
+                "wait": 100
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle RCPT TO commands - Success case",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^RCPT TO:"
+              }
+            },
+            {
+              "not": {
+                "matches": {
+                  "data": "blocked@|spam@|invalid@|reject@"
+                }
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 2.1.5 Recipient OK\r\n"
+              },
+              "_behaviors": {
+                "wait": 150
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle RCPT TO commands - Rejected recipients",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^RCPT TO:"
+              }
+            },
+            {
+              "matches": {
+                "data": "blocked@|spam@|invalid@|reject@"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "550 5.1.1 User unknown\r\n"
+              },
+              "_behaviors": {
+                "wait": 200
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle DATA command",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^DATA"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "354 Start mail input; end with <CRLF>.<CRLF>\r\n"
+              },
+              "_behaviors": {
+                "wait": 50
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle end of DATA (message termination)",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^\\.$"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 2.0.0 Message accepted for delivery\r\n"
+              },
+              "_behaviors": {
+                "wait": 300
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle email content (anything that looks like email headers or body)",
+          "predicates": [
+            {
+              "or": [
+                {
+                  "matches": {
+                    "data": "^From:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^To:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^Subject:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^Date:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^Message-ID:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^Content-Type:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^Content-Transfer-Encoding:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^MIME-Version:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^X-.*:\\s*"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^This is a test email"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^Test Details:"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^- Thread:"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^- Iteration:"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^- Timestamp:"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^- Sender:"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^- Recipient:"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^This email is part of"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^Best regards,"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^JMeter SMTP"
+                  }
+                },
+                {
+                  "matches": {
+                    "data": "^\\s*$"
+                  }
+                }
+              ]
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 2.0.0 Email content received\r\n"
+              },
+              "_behaviors": {
+                "wait": 10
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle any other email content or body text (fallback for email data)",
+          "predicates": [
+            {
+              "and": [
+                {
+                  "not": {
+                    "matches": {
+                      "data": "^(EHLO|HELO|MAIL|RCPT|DATA|RSET|NOOP|QUIT|HELP|AUTH|STARTTLS|VRFY)\\b"
+                    }
+                  }
+                },
+                {
+                  "not": {
+                    "matches": {
+                      "data": "^\\.$"
+                    }
+                  }
+                },
+                {
+                  "matches": {
+                    "data": ".+"
+                  }
+                }
+              ]
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 2.0.0 Email data accepted\r\n"
+              },
+              "_behaviors": {
+                "wait": 5
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle RSET command",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^RSET"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 2.0.0 Reset OK\r\n"
+              },
+              "_behaviors": {
+                "wait": 50
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle NOOP command",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^NOOP"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 2.0.0 OK\r\n"
+              },
+              "_behaviors": {
+                "wait": 25
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle QUIT command",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^QUIT"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "221 2.0.0 127.0.0.1 closing connection\r\n"
+              },
+              "_behaviors": {
+                "wait": 100
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle HELP command",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^HELP"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "214-This is Mock SMTP Server for JMeter Testing\r\n214-Commands supported:\r\n214-HELO EHLO MAIL RCPT DATA RSET NOOP QUIT HELP\r\n214 End of HELP info\r\n"
+              },
+              "_behaviors": {
+                "wait": 100
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle AUTH commands (simulated authentication)",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^AUTH"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "235 2.7.0 Authentication successful\r\n"
+              },
+              "_behaviors": {
+                "wait": 200
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle STARTTLS command",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^STARTTLS"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "220 2.0.0 Ready to start TLS\r\n"
+              },
+              "_behaviors": {
+                "wait": 150
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle VRFY command (verify user)",
+          "predicates": [
+            {
+              "matches": {
+                "data": "^VRFY"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "250 2.1.5 User is valid\r\n"
+              },
+              "_behaviors": {
+                "wait": 200
+              }
+            }
+          ]
+        },
+        {
+          "_comment": "Handle unknown/unsupported commands (only actual invalid SMTP commands)",
+          "predicates": [
+            {
+              "and": [
+                {
+                  "matches": {
+                    "data": "^[A-Z]{3,8}\\b"
+                  }
+                },
+                {
+                  "not": {
+                    "matches": {
+                      "data": "^(EHLO|HELO|MAIL|RCPT|DATA|RSET|NOOP|QUIT|HELP|AUTH|STARTTLS|VRFY)\\b"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "data": "500 5.5.1 Command not recognized\r\n"
+              },
+              "_behaviors": {
+                "wait": 100
+              }
+            }
+          ]
+        }
+      ]
+    }
+ ]
+}

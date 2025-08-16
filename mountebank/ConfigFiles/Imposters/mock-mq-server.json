@@ -1,0 +1,147 @@
+{
+  "imposters": [
+    {
+      "port": 3002,
+      "protocol": "http",
+      "name": "Mock IBM MQ Server",
+      "recordRequests": true,
+      "stubs": [
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "POST",
+                "path": "/mq/send"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockSend(config.request); }"
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/mq/receive"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockReceive(config.request); }"
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "POST",
+                "path": "/mq/browse"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockBrowse(config.request); }"
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/mq/depth"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockDepth(config.request); }"
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/mq/health"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockHealth(config.request); }"
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/mq/queues"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockList(config.request); }"
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "POST",
+                "path": "/mq/queues"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockCreate(config.request); }"
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "DELETE",
+                "path": "/mq/clear"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockClear(config.request); }"
+            }
+          ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/mq/status"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "inject": "function(config) { const path = require('path'); const middleware = require(path.join(process.cwd(), 'lib', 'mq', 'mq-bridge-middleware')); return middleware.mockStatus(config.request); }"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "productId": "PROD-620428-2025",
+  "productCode": "PROD-CODE-707",
+  "productName": "Samsung Galaxy Ultra Pro Max",
+  "status": "ACTIVE",
+  "category": "Phones",
+  "subCategory": "Smartphones",
+  "brand": "Samsung",
+  "description": "Latest flagship smartphone with advanced features",
+  "createdAt": "2025-08-13T11:57:25.351Z",
+  "pricing": {
+    "currency": "USD"
+  },
+  "inventory": {
+    "totalStock": 112,
+    "availableStock": 81
+  },
+  "qrCode": "https://api.productservice.com/qr/PROD-620428-2025",
+  "deepLink": "productapp://product/PROD-620428-2025"
+}

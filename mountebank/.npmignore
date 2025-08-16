@@ -1,0 +1,22 @@
+# Tests
+test/
+mbTest/
+
+# Documentation
+docs/
+
+# Development files
+.eslintrc.json
+.jsdoc
+.gitignore
+.travis.yml
+
+# Tasks
+tasks/
+
+# Logs
+*.log
+
+# Coverage directory
+coverage/
+.nyc_output/
