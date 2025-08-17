@@ -6,17 +6,17 @@ FROM node:18-alpine
 WORKDIR /usr/mountebank
 
 # Copy package files
-COPY package*.json ./
-COPY product-controller.js ./
-COPY product-persistence.js ./
-COPY nodemailer-smtp-mock-server.js ./
-COPY smtp-server-management.js ./
-COPY bin ./bin
-COPY src ./src
-COPY ConfigFiles ./ConfigFiles
-COPY lib ./lib
-COPY start-mq-server.js ./
-COPY startup.sh ./
+COPY package*.json ./usr/mountebank
+COPY product-controller.js ./usr/mountebank
+COPY product-persistence.js ./usr/mountebank
+COPY nodemailer-smtp-mock-server.js ./usr/mountebank
+COPY smtp-server-management.js ./usr/mountebank
+COPY bin ./usr/mountebank/bin
+COPY src ./usr/mountebank/src
+COPY ConfigFiles ./usr/mountebank/ConfigFiles
+COPY lib ./usr/mountebank/lib
+COPY start-mq-server.js ./usr/mountebank
+COPY startup.sh ./usr/mountebank
 
 # Install dependencies
 RUN npm install --production
