@@ -2,7 +2,8 @@
 
 FROM node:18-alpine
 
-WORKDIR /home/site/wwwroot
+#WORKDIR /home/site/wwwroot
+WORKDIR /usr/mountebank
 
 # Copy package files
 COPY package*.json ./
