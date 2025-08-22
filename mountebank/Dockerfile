@@ -3,7 +3,6 @@
 FROM node:18-alpine
 
 #WORKDIR /home/site/wwwroot
-WORKDIR /usr/mountebank
 
 # Copy package files
 COPY package*.json /usr/mountebank
@@ -12,18 +11,36 @@ COPY product-persistence.js /usr/mountebank
 COPY nodemailer-smtp-mock-server.js /usr/mountebank
 COPY smtp-server-management.js /usr/mountebank
 COPY ./bin /usr/mountebank/bin
-COPY ./src /usr/mountebank/src
 COPY ./ConfigFiles /usr/mountebank/ConfigFiles
+COPY ./images /usr/mountebank/images
 COPY ./lib /usr/mountebank/lib
-COPY start-mq-server.js /usr/mountebank
-COPY startup.sh /usr/mountebank
+COPY ./products /usr/mountebank/products
+COPY ./scripts /usr/mountebank/scripts
+COPY ./src /usr/mountebank/src
+COPY ./tasks /usr/mountebank/tasks
+COPY ./test /usr/mountebank/test
+COPY start-mq-server.js /usr/mountebank/
+COPY ./.npmignore \
+    ./.gitignore \
+    ./README.md \
+    ./LICENSE \
+    /usr/mountebank/
+
+WORKDIR /usr/mountebank
+RUN node --version
 
 # Install dependencies
-RUN npm install --production
+RUN npm install --production && \
+    npm install --save glob && \
+    chmod 777 ./ && \
+    adduser --system --home '/home/mountebank' --disabled-login --shell /bin/bash mountebank && \
+    chown -R mountebank /usr/mountebank && \
+    chmod 777 /home/mountebank
 
-# Set permissions
-RUN chmod +x startup.sh
+USER mountebank
+ENV HOME="/home/mountebank"
+
 
 EXPOSE 2525 3002 3005 8080
 
-CMD ["/bin/sh", "./startup.sh"]
+CMD ["npm", "run", "start"]
