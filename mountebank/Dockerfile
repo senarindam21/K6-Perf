@@ -1,8 +1,8 @@
-# syntax=docker/dockerfile:1
-
 FROM node:22.16.0-alpine
 
 #WORKDIR /home/site/wwwroot
+WORKDIR /usr/mountebank
+
 
 # Copy package files
 COPY package*.json /usr/mountebank/
@@ -27,7 +27,7 @@ COPY ./.npmignore \
     ./LICENSE \
     /usr/mountebank/
 
-WORKDIR /usr/mountebank
+
 RUN node --version
 
 # Install dependencies
