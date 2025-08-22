@@ -15,6 +15,7 @@ COPY ./ConfigFiles /usr/mountebank/ConfigFiles
 COPY ./images /usr/mountebank/images
 COPY ./lib /usr/mountebank/lib
 COPY ./products /usr/mountebank/products
+COPY ./redist /usr/mountebank/redist
 COPY ./scripts /usr/mountebank/scripts
 COPY ./src /usr/mountebank/src
 COPY ./tasks /usr/mountebank/tasks
