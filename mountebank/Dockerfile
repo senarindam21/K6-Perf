@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:18-alpine
+FROM node:22.16.0-alpine
 
 #WORKDIR /home/site/wwwroot
 
@@ -28,6 +28,7 @@ COPY ./.npmignore \
 
 WORKDIR /usr/mountebank
 RUN node --version
+RUN python --version
 
 # Install dependencies
 RUN npm install --production && \
