@@ -5,11 +5,11 @@ FROM node:18-alpine
 #WORKDIR /home/site/wwwroot
 
 # Copy package files
-COPY package*.json /usr/mountebank
-COPY product-controller.js /usr/mountebank
-COPY product-persistence.js /usr/mountebank
-COPY nodemailer-smtp-mock-server.js /usr/mountebank
-COPY smtp-server-management.js /usr/mountebank
+COPY package*.json /usr/mountebank/
+COPY product-controller.js /usr/mountebank/
+COPY product-persistence.js /usr/mountebank/
+COPY nodemailer-smtp-mock-server.js /usr/mountebank/
+COPY smtp-server-management.js /usr/mountebank/
 COPY ./bin /usr/mountebank/bin
 COPY ./ConfigFiles /usr/mountebank/ConfigFiles
 COPY ./images /usr/mountebank/images
