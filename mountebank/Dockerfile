@@ -28,7 +28,6 @@ COPY ./.npmignore \
 
 WORKDIR /usr/mountebank
 RUN node --version
-RUN python --version
 
 # Install dependencies
 RUN npm install --production && \
