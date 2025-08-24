@@ -39,7 +39,7 @@ RUN mkdir -p /opt/mqclient && \
 RUN npm install --production
 RUN npm install --save glob
 RUN chmod 777 ./
-RUN adduser --system --home '/home/mountebank' --disabled-login --shell /bin/bash mountebank
+RUN adduser --home '/home/mountebank' --shell /bin/bash mountebank
 RUN chown -R mountebank /usr/mountebank
 RUN chmod 777 /home/mountebank
 
