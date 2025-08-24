@@ -2,10 +2,11 @@ FROM node:22.16.0-alpine
 
 #WORKDIR /home/site/wwwroot
 WORKDIR /usr/mountebank
-ENV MQ_INSTALLATION_PATH=/usr/mountebank/redist
+ENV MQ_INSTALLATION_PATH=/opt/mqclient
 ENV PATH=$MQ_INSTALLATION_PATH/bin64:$PATH
 
 # Copy package files
+COPY ./redist/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar /tmp/ 
 COPY package*.json /usr/mountebank/
 COPY product-controller.js /usr/mountebank/
 COPY product-persistence.js /usr/mountebank/
@@ -16,7 +17,6 @@ COPY ./ConfigFiles /usr/mountebank/ConfigFiles
 COPY ./images /usr/mountebank/images
 COPY ./lib /usr/mountebank/lib
 COPY ./products /usr/mountebank/products
-COPY ./redist /usr/mountebank/redist
 COPY ./scripts /usr/mountebank/scripts
 COPY ./src /usr/mountebank/src
 COPY ./tasks /usr/mountebank/tasks
@@ -33,6 +33,8 @@ RUN node --version
 
 # Install dependencies
 RUN apk update && apk add --no-cache tar bash curl
+RUN mkdir -p /opt/mqclient && \
+    tar -xf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar -C /opt/mqclient
 RUN npm install --production && \
     npm install --save glob && \
     chmod 777 ./ && \
