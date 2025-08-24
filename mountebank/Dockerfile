@@ -34,7 +34,7 @@ RUN node --version
 # Install dependencies
 RUN apk update && apk add --no-cache tar bash curl
 RUN mkdir -p /opt/mqclient && \
-RUN tar -xzf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz
+    tar -xzf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz
 RUN tar -xf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar -C /opt/mqclient
 RUN npm install --production && \
     npm install --save glob && \
