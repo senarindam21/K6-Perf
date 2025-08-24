@@ -35,7 +35,7 @@ RUN node --version
 RUN apk update && apk add --no-cache tar bash curl
 RUN mkdir -p /opt/mqclient && \
     tar -xzf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz
-RUN tar -xf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar -C /opt/mqclient
+RUN tar -xf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar/ -C /opt/mqclient
 RUN npm install --production && \
     npm install --save glob && \
     chmod 777 ./ && \
