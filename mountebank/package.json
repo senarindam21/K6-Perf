@@ -36,7 +36,6 @@
     "startNodemailerSMTP": "node nodemailer-smtp-mock-server.js && npm run node smtp-server-management.js",
     "startSMTPManagement": "node smtp-server-management.js"
   },
-
   "keywords": [
     "test",
     "stub",
@@ -54,6 +53,7 @@
     "@xmldom/xmldom": "0.8.10",
     "cors": "2.8.5",
     "csv-parse": "5.5.3",
+    "dotenv": "^16.3.1",
     "ejs": "3.1.9",
     "errorhandler": "1.5.1",
     "escape-html": "1.0.3",
@@ -71,7 +71,6 @@
     "proper-lockfile": "4.1.2",
     "safe-regex": "^2.1.1",
     "safe-stable-stringify": "2.4.3",
-    "dotenv": "^16.3.1",
     "smtp-server": "3.13.2",
     "winston": "3.11.0",
     "xpath": "0.0.34",

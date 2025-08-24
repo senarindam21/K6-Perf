@@ -2,7 +2,8 @@ FROM node:22.16.0-alpine
 
 #WORKDIR /home/site/wwwroot
 WORKDIR /usr/mountebank
-
+ENV MQ_INSTALLATION_PATH=/usr/mountebank/redist
+ENV PATH=$MQ_INSTALLATION_PATH/bin64:$PATH
 
 # Copy package files
 COPY package*.json /usr/mountebank/
