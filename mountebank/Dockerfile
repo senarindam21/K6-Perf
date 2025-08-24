@@ -32,7 +32,7 @@ COPY ./.npmignore \
 RUN node --version
 
 # Install dependencies
-RUN apt-get update && apt-get install -y tar bash curl
+RUN apk update && apk add --no-cache tar bash curl
 RUN npm install --production && \
     npm install --save glob && \
     chmod 777 ./ && \
