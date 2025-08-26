@@ -35,7 +35,8 @@ RUN node --version
 RUN apk update && apk add --no-cache tar bash curl
 RUN mkdir -p /opt/mqclient && \
     tar -xzf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz -C /opt/mqclient
- 
+    
+RUN chown -R root:root /usr/mountebank
 RUN npm install --production
 RUN npm install --save glob
 RUN chmod 777 ./
