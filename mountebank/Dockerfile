@@ -36,13 +36,13 @@ RUN apk update && apk add --no-cache tar bash curl
 RUN mkdir -p /opt/mqclient && \
     tar -xzf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz -C /opt/mqclient
     
-RUN adduser -D -h '/home/mountebank' mountebank
+RUN adduser -D -h '/usr/mountebank' mountebank
 RUN chown -R mountebank /usr/mountebank
 RUN chgrp -R 0 /usr/mountebank
 RUN chmod 777 /usr/mountebank
 
 USER mountebank
-ENV HOME="/home/mountebank"
+ENV HOME="/usr/mountebank"
 RUN npm install --production
 RUN npm install --save glob
 
