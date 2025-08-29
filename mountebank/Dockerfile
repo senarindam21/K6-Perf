@@ -36,7 +36,7 @@ RUN apk update && apk add --no-cache tar bash curl
 RUN mkdir -p /opt/mqclient && \
     tar -xzf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz -C /opt/mqclient
     
-#RUN adduser -D -h '/usr/mountebank' mountebank
+RUN adduser -D -h '/usr/mountebank' mountebank
 RUN chown -R 0:0 /usr/mountebank 
 RUN chgrp -R 0 /usr/mountebank && chmod -R g=u /usr/mountebank
 #RUN chmod -R g=u /usr/mountebank
