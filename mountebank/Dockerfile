@@ -4,6 +4,7 @@ FROM node:22.16.0-alpine
 WORKDIR /usr/mountebank
 ENV MQ_INSTALLATION_PATH=/opt/mqclient
 ENV PATH=$MQ_INSTALLATION_PATH/bin64:$PATH
+#ENV HOME="/usr/mountebank"
 
 # Copy package files
 COPY 9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz /tmp/ 
@@ -37,12 +38,10 @@ RUN mkdir -p /opt/mqclient && \
     tar -xzf /tmp/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz -C /opt/mqclient
     
 RUN adduser -D -h '/usr/mountebank' mountebank
-RUN chown -R 0:0 /usr/mountebank
 RUN chgrp -R 0 /usr/mountebank
-RUN chmod 777 /usr/mountebank
+RUN chmod -R g=u /usr/mountebank
 
 USER mountebank
-ENV HOME="/usr/mountebank"
 RUN npm install --production
 RUN npm install --save glob
 
