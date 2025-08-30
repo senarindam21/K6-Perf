@@ -46,7 +46,7 @@ RUN adduser -D -h '/usr/mountebank' mountebank
 USER mountebank
 RUN whoami
 
-RUN chgrp -R mountebank /usr/mountebank && chmod -R g=u /usr/mountebank
+RUN chmod -R g+rw /usr/mountebank
 
 
 
