@@ -2,9 +2,11 @@ FROM node:22.16.0-alpine
 
 #WORKDIR /home/site/wwwroot
 WORKDIR /usr/mountebank
+ENV HOME=/usr/mountebank
 #ENV MQ_INSTALLATION_PATH=/opt/mqclient
 #ENV PATH=$MQ_INSTALLATION_PATH/bin64:$PATH
 #RUN chgrp -R 0 /usr/mountebank && chmod -R g=u /usr/mountebank
+RUN mkdir -p /usr/mountebank && chmod -R 777 /usr/mountebank
 
 # Copy package files
 #COPY 9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz /usr/mountebank/ 
