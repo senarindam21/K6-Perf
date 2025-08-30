@@ -35,7 +35,7 @@ RUN node --version
 RUN chown -R 0:0 /usr/mountebank && chmod -R g=u /usr/mountebank
 #RUN chgrp -R 0 /usr/mountebank && chmod -R g=u /usr/mountebank
 #RUN chmod -R g=u /usr/mountebank
-
+RUN chown -R 0:0 /usr/mountebank/node_modules/ && chmod -R g=u /usr/mountebank/node_modules/
 # Install dependencies
 
 
