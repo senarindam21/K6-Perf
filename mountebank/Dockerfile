@@ -6,7 +6,7 @@ ENV MQ_INSTALLATION_PATH=/opt/mqclient
 ENV PATH=$MQ_INSTALLATION_PATH/bin64:$PATH
 
 # Copy package files
-#COPY 9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz /tmp/ 
+COPY 9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz /usr/mountebank/ 
 COPY package*.json /usr/mountebank/
 COPY product-controller.js /usr/mountebank/
 COPY product-persistence.js /usr/mountebank/
@@ -37,8 +37,9 @@ RUN chgrp -R 0 /usr/mountebank && chmod -R g=u /usr/mountebank
 #RUN chmod -R g=u /usr/mountebank
 
 # Install dependencies
-#RUN apk update && apk add --no-cache tar bash curl
-
+RUN apk update && apk add --no-cache tar bash curl
+RUN mkdir -p /usr/mountebank/mqclient && \
+    tar -xzf /usr/mountebank/9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz -C /usr/mountebank/mqclient
 
 RUN npm install --production
 RUN npm install --save glob
