@@ -6,7 +6,7 @@ ENV MQ_INSTALLATION_PATH=/opt/mqclient
 ENV PATH=$MQ_INSTALLATION_PATH/bin64:$PATH
 
 # Copy package files
-COPY 9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz /tmp/ 
+#COPY 9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz /tmp/ 
 COPY package*.json /usr/mountebank/
 COPY product-controller.js /usr/mountebank/
 COPY product-persistence.js /usr/mountebank/
