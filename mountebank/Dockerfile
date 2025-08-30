@@ -43,10 +43,11 @@ RUN npm install --production
 RUN npm install --save glob
 RUN whoami
 RUN adduser -D -h '/usr/mountebank' mountebank
+USER mountebank
 RUN whoami
 
 RUN chown -R mountebank:mountebank /usr/mountebank/node_modules 
-USER mountebank
+
 
 
 EXPOSE 2525 3002 3005 8080
