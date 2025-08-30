@@ -33,8 +33,7 @@ RUN node --version
     
 #RUN adduser -D -h '/usr/mountebank' mountebank
 #RUN chown -R 0:0 /usr/mountebank && chmod -R g=u /usr/mountebank
-RUN chgrp -R 0 /usr/mountebank && 
-    chmod -R g=u /usr/mountebank
+RUN chgrp -R 0 /usr/mountebank && chmod -R g=u /usr/mountebank
 #RUN chmod -R g=u /usr/mountebank
 
 # Install dependencies
