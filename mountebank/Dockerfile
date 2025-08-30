@@ -42,8 +42,11 @@ RUN chown -R 0:0 /usr/mountebank && chmod -R g=u /usr/mountebank
 RUN npm install --production
 RUN npm install --save glob
 RUN whoami
-USER mountebank
+RUN adduser -D -h '/usr/mountebank' mountebank
+RUN whoami
+
 RUN chown -R mountebank:mountebank /usr/mountebank/node_modules 
+USER mountebank
 
 
 EXPOSE 2525 3002 3005 8080
