@@ -42,11 +42,11 @@ RUN chown -R 0:0 /usr/mountebank && chmod -R g=u /usr/mountebank
 RUN npm install --production
 RUN npm install --save glob
 RUN whoami
-RUN adduser -D -h '/usr/mountebank' mountebank
-USER mountebank
+#RUN adduser -D -h '/usr/mountebank' mountebank
+#USER mountebank
 RUN whoami
 
-RUN chown -R mountebank:mountebank /usr/mountebank/node_modules 
+#RUN chown -R mountebank:mountebank /usr/mountebank/node_modules 
 
 
 
