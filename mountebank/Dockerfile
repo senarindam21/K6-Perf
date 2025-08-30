@@ -32,8 +32,9 @@ COPY ./.npmignore \
 RUN node --version
     
 #RUN adduser -D -h '/usr/mountebank' mountebank
-RUN chown -R 0:0 /usr/mountebank && chmod -R g=u /usr/mountebank
-#RUN chgrp -R 0 /usr/mountebank && chmod -R g=u /usr/mountebank
+#RUN chown -R 0:0 /usr/mountebank && chmod -R g=u /usr/mountebank
+RUN chgrp -R 0 /usr/mountebank && 
+    chmod -R g=u /usr/mountebank
 #RUN chmod -R g=u /usr/mountebank
 
 # Install dependencies
@@ -42,11 +43,11 @@ RUN chown -R 0:0 /usr/mountebank && chmod -R g=u /usr/mountebank
 RUN npm install --production
 RUN npm install --save glob
 RUN whoami
-RUN adduser -D -h '/usr/mountebank' mountebank
-USER mountebank
-RUN whoami
+#RUN adduser -D -h '/usr/mountebank' mountebank
+#USER mountebank
+#RUN whoami
 
-RUN chmod -R g+rw /usr/mountebank
+#RUN chmod -R  /usr/mountebank/node_modules
 
 
 
