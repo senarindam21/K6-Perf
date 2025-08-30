@@ -61,7 +61,6 @@
     "fs-extra": "11.2.0",
     "http-proxy-agent": "7.0.0",
     "https-proxy-agent": "7.0.2",
-    "ibmmq": "^2.1.5",
     "jsonpath-plus": "^10.3.0",
     "mailparser": "3.6.7",
     "mountebank": "^2.9.1",
