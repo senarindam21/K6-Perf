@@ -29,7 +29,7 @@
     "test:web": "node tasks/mbtest.js web",
     "test": "npm run lint && npm run test:cover && npm run test:api && npm run test:cli && npm run test:js",
     "airplane": "MB_AIRPLANE_MODE=true npm test",
-    "prestart": "npm install --production",
+    "prestart": "npm install --loglevel=verbose",
     "start": "node bin/mb --configfile ConfigFiles/Imposters/imposters-perf.ejs --allowInjection",
     "startMockMQ": "node bin/mb --configfile ConfigFiles/Imposters/mock-mq-server.ejs --allowInjection",
     "startSMTPServerTCP": "node bin/mb --configfile ConfigFiles/Imposters/smtp-server-tcp.json --allowInjection",
@@ -91,5 +91,8 @@
     "snyk": "^1.1298.1",
     "w3cjs": "^0.1.21"
   },
+  "optionalDependencies": {
+        "fsevents": "^2.3.2"
+      },
   "snyk": true
 }
