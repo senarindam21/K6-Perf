@@ -1,7 +1,7 @@
 FROM node:22.16.0-alpine
 
 #WORKDIR /home/site/wwwroot
-
+WORKDIR /usr/mountebank
 
 #ENV MQ_INSTALLATION_PATH=/opt/mqclient
 #ENV PATH=$MQ_INSTALLATION_PATH/bin64:$PATH
@@ -31,7 +31,7 @@ COPY ./.npmignore \
     ./LICENSE \
     /usr/mountebank/
 
-WORKDIR /usr/mountebank
+
 RUN node --version
     
 #RUN adduser -D -h '/usr/mountebank' mountebank
@@ -41,17 +41,25 @@ RUN node --version
 
 # Install dependencies
 
+RUN npm ci --only=production && \
+    npm cache clean --force
+    
+#RUN npm install
+#RUN npm install --save glob
+#RUN chmod 777 ./
+#RUN whoami
+#RUN adduser -D -h '/home/mountebank' -s /bin/sh -S mountebank
+#RUN chown -R mountebank /usr/mountebank
+#RUN chmod 777 /home/mountebank
 
-RUN npm install
-RUN npm install --save glob
-RUN chmod 777 ./
-RUN whoami
-RUN adduser -D -h '/home/mountebank' -s /bin/sh -S mountebank
-RUN chown -R mountebank /usr/mountebank
-RUN chmod 777 /home/mountebank
+RUN adduser -D mountebank && \
+    chown -R mountebank:mountebank /usr/mountebank && \
+    chgrp -R 0 /usr/mountebank && \
+    chmod -R g=u /usr/mountebank && \
+    chmod +x ./bin/mb
 
 USER mountebank
-ENV HOME=/home/mountebank
+#ENV HOME=/home/mountebank
 RUN whoami
 
 
