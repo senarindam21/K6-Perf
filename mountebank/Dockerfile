@@ -2,9 +2,7 @@ FROM node:22.16.0-alpine
 
 #WORKDIR /home/site/wwwroot
 WORKDIR /usr/mountebank
-ENV HOME=/home/mountebank
-ENV npm_config_cache=/home/mountebank/.npm
-ENV PATH=$npm_config_cache/bin:$PATH
+
 #ENV MQ_INSTALLATION_PATH=/opt/mqclient
 #ENV PATH=$MQ_INSTALLATION_PATH/bin64:$PATH
 
@@ -59,7 +57,10 @@ RUN adduser -D mountebank && \
     chmod -R g=u /usr/mountebank /home/mountebank && \
     chmod +x ./bin/mb
 
-
+ENV npm_config_cache=/home/mountebank/.npm
+ENV npm_config_prefix=/home/mountebank/.npm-global
+ENV HOME=/home/mountebank
+ENV PATH=$npm_config_prefix/bin:$PATH
 
 
 USER mountebank
