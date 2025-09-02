@@ -46,7 +46,7 @@ RUN npm install
 RUN npm install --save glob
 RUN chmod 777 ./
 RUN whoami
-RUN adduser --system --home '/home/mountebank' --disabled-login --shell /bin/sh mountebank
+RUN adduser -D -h '/home/mountebank' -s /bin/sh -S mountebank
 RUN chown -R mountebank /usr/mountebank
 RUN chmod 777 /home/mountebank
 
