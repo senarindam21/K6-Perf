@@ -53,14 +53,16 @@ RUN npm ci --only=production && \
 #RUN chmod 777 /home/mountebank
 
 RUN adduser -D mountebank && \
-    mkdir -p /usr/mountebank/.npm && \
-    chown -R mountebank:mountebank /usr/mountebank && \
-    chgrp -R 0 /usr/mountebank && \
-    chmod -R g=u /usr/mountebank && \
+    mkdir -p /home/mountebank/.npm && \
+    chown -R mountebank:mountebank /usr/mountebank /home/mountebank && \
+    chgrp -R 0 /usr/mountebank /home/mountebank && \
+    chmod -R g=u /usr/mountebank /home/mountebank && \
     chmod +x ./bin/mb
 
+ENV npm_config_cache=/home/mountebank/.npm
+ENV HOME=/home/mountebank
+
 USER mountebank
-#ENV HOME=/home/mountebank
 RUN whoami
 
 
