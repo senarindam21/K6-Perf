@@ -1,6 +1,5 @@
 FROM node:22.16.0-alpine
 
-#WORKDIR /home/site/wwwroot
 WORKDIR /usr/mountebank
 
 #ENV MQ_INSTALLATION_PATH=/opt/mqclient
@@ -9,7 +8,6 @@ WORKDIR /usr/mountebank
 # Copy package files
 #COPY 9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz /usr/mountebank/ 
 COPY package*.json /usr/mountebank/
-COPY releases.json /usr/mountebank/
 COPY product-controller.js /usr/mountebank/
 COPY product-persistence.js /usr/mountebank/
 COPY nodemailer-smtp-mock-server.js /usr/mountebank/
