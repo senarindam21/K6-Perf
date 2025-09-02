@@ -9,6 +9,7 @@ WORKDIR /usr/mountebank
 # Copy package files
 #COPY 9.4.3.0-IBM-MQC-Redist-LinuxX64.tar.gz /usr/mountebank/ 
 COPY package*.json /usr/mountebank/
+COPY releases.json /usr/mountebank/
 COPY product-controller.js /usr/mountebank/
 COPY product-persistence.js /usr/mountebank/
 COPY nodemailer-smtp-mock-server.js /usr/mountebank/
