@@ -43,7 +43,7 @@ RUN node --version
 
 RUN npm ci --only=production && \
     npm cache clean --force
-    
+
 #RUN npm install
 #RUN npm install --save glob
 #RUN chmod 777 ./
@@ -53,6 +53,7 @@ RUN npm ci --only=production && \
 #RUN chmod 777 /home/mountebank
 
 RUN adduser -D mountebank && \
+    mkdir -p /usr/mountebank/.npm && \
     chown -R mountebank:mountebank /usr/mountebank && \
     chgrp -R 0 /usr/mountebank && \
     chmod -R g=u /usr/mountebank && \
